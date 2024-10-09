@@ -1,0 +1,66 @@
+local ScreenGui = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local AutoFightButton = Instance.new("TextButton")
+local CollectFruitsButton = Instance.new("TextButton")
+
+-- Configurações da GUI
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+Frame.Parent = ScreenGui
+Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+Frame.Position = UDim2.new(0.5, -100, 0.5, -100)
+Frame.Size = UDim2.new(0, 200, 0, 200)
+
+AutoFightButton.Parent = Frame
+AutoFightButton.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+AutoFightButton.Size = UDim2.new(1, 0, 0, 50)
+AutoFightButton.Text = "Auto Fight"
+AutoFightButton.Font = Enum.Font.SourceSans
+AutoFightButton.TextSize = 24
+AutoFightButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+CollectFruitsButton.Parent = Frame
+CollectFruitsButton.BackgroundColor3 = Color3.fromRGB(0, 0, 170)
+CollectFruitsButton.Position = UDim2.new(0, 0, 0, 60)
+CollectFruitsButton.Size = UDim2.new(1, 0, 0, 50)
+CollectFruitsButton.Text = "Collect Fruits"
+CollectFruitsButton.Font = Enum.Font.SourceSans
+CollectFruitsButton.TextSize = 24
+CollectFruitsButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+-- Funções para Auto Fight e Collect Fruits
+local player = game.Players.LocalPlayer
+local char = player.Character or player.CharacterAdded:Wait()
+local humanoid = char:WaitForChild("Humanoid")
+
+-- Função de auto-fight
+function autoFight()
+    while true do
+        wait(1)
+        for _, enemy in pairs(workspace:GetChildren()) do
+            if enemy:IsA("Model") and enemy:FindFirstChild("Humanoid") and enemy.Humanoid.Health > 0 then
+                humanoid:MoveTo(enemy.PrimaryPart.Position)
+                wait(0.5)
+                -- Adicione o código de ataque aqui
+            end
+        end
+    end
+end
+
+-- Função para coletar frutas
+function collectFruits()
+    for _, fruit in pairs(workspace:GetChildren()) do
+        if fruit:IsA("Model") and fruit.Name:match("Fruit") then
+            fruit:Destroy() -- Destroi a fruta para coletar
+        end
+    end
+end
+
+-- Conectar botões às funções
+AutoFightButton.MouseButton1Click:Connect(function()
+    autoFight()
+end)
+
+CollectFruitsButton.MouseButton1Click:Connect(function()
+    collectFruits()
+end)
